@@ -14,7 +14,276 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      badges: {
+        Row: {
+          created_at: string | null
+          criteria: Json | null
+          description: string | null
+          icon: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string | null
+          criteria?: Json | null
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string | null
+          criteria?: Json | null
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      guilds: {
+        Row: {
+          created_at: string | null
+          id: string
+          member_count: number | null
+          mission_submissions: Json | null
+          name: string
+          rank_in_class: number | null
+          shared_xp: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          member_count?: number | null
+          mission_submissions?: Json | null
+          name: string
+          rank_in_class?: number | null
+          shared_xp?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          member_count?: number | null
+          mission_submissions?: Json | null
+          name?: string
+          rank_in_class?: number | null
+          shared_xp?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string | null
+          display_name: string
+          id: string
+          language_pref: string | null
+          role: string
+          school_id: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          display_name: string
+          id?: string
+          language_pref?: string | null
+          role: string
+          school_id?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          display_name?: string
+          id?: string
+          language_pref?: string | null
+          role?: string
+          school_id?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      quest_attempts: {
+        Row: {
+          completed: boolean | null
+          completed_at: string | null
+          created_at: string | null
+          hint_count: number | null
+          id: string
+          progress: number | null
+          quest_id: string
+          started_at: string | null
+          step_results: Json | null
+          time_spent: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          completed?: boolean | null
+          completed_at?: string | null
+          created_at?: string | null
+          hint_count?: number | null
+          id?: string
+          progress?: number | null
+          quest_id: string
+          started_at?: string | null
+          step_results?: Json | null
+          time_spent?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          completed?: boolean | null
+          completed_at?: string | null
+          created_at?: string | null
+          hint_count?: number | null
+          id?: string
+          progress?: number | null
+          quest_id?: string
+          started_at?: string | null
+          step_results?: Json | null
+          time_spent?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quest_attempts_quest_id_fkey"
+            columns: ["quest_id"]
+            isOneToOne: false
+            referencedRelation: "quests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quests: {
+        Row: {
+          content: Json
+          created_at: string | null
+          difficulty: string
+          duration: string
+          grade_level: number | null
+          id: string
+          skill_tags: string[] | null
+          steps: Json | null
+          subject: string
+          title: string
+          updated_at: string | null
+          xp_reward: number
+        }
+        Insert: {
+          content?: Json
+          created_at?: string | null
+          difficulty: string
+          duration: string
+          grade_level?: number | null
+          id?: string
+          skill_tags?: string[] | null
+          steps?: Json | null
+          subject: string
+          title: string
+          updated_at?: string | null
+          xp_reward?: number
+        }
+        Update: {
+          content?: Json
+          created_at?: string | null
+          difficulty?: string
+          duration?: string
+          grade_level?: number | null
+          id?: string
+          skill_tags?: string[] | null
+          steps?: Json | null
+          subject?: string
+          title?: string
+          updated_at?: string | null
+          xp_reward?: number
+        }
+        Relationships: []
+      }
+      students: {
+        Row: {
+          baseline_scores: Json | null
+          created_at: string | null
+          guild_id: string | null
+          id: string
+          level: number | null
+          mastery_state: Json | null
+          streak_days: number | null
+          total_xp: number | null
+          updated_at: string | null
+          user_id: string
+          weekly_progress: number | null
+        }
+        Insert: {
+          baseline_scores?: Json | null
+          created_at?: string | null
+          guild_id?: string | null
+          id?: string
+          level?: number | null
+          mastery_state?: Json | null
+          streak_days?: number | null
+          total_xp?: number | null
+          updated_at?: string | null
+          user_id: string
+          weekly_progress?: number | null
+        }
+        Update: {
+          baseline_scores?: Json | null
+          created_at?: string | null
+          guild_id?: string | null
+          id?: string
+          level?: number | null
+          mastery_state?: Json | null
+          streak_days?: number | null
+          total_xp?: number | null
+          updated_at?: string | null
+          user_id?: string
+          weekly_progress?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_students_guild"
+            columns: ["guild_id"]
+            isOneToOne: false
+            referencedRelation: "guilds"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_badges: {
+        Row: {
+          awarded_at: string | null
+          badge_id: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          awarded_at?: string | null
+          badge_id: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          awarded_at?: string | null
+          badge_id?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_badges_badge_id_fkey"
+            columns: ["badge_id"]
+            isOneToOne: false
+            referencedRelation: "badges"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
