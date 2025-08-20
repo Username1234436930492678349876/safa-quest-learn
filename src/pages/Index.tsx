@@ -1,14 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LanguageToggle } from '@/components/ui/language-toggle';
 import { RoleCard } from '@/components/ui/role-card';
 import { Button } from '@/components/ui/button';
-import { GraduationCap, Users, BookOpen, Sparkles } from 'lucide-react';
+import { GraduationCap, Users, BookOpen, Sparkles, LogOut } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
 import heroQuestScroll from '@/assets/hero-quest-scroll.jpg';
 
 const Index = () => {
   const [language, setLanguage] = useState<'en' | 'ar'>('en');
+  const { user, profile, signOut } = useAuth();
   const navigate = useNavigate();
+
+  // Redirect logged in users to their dashboard
+  useEffect(() => {
+    if (user && profile) {
+      if (profile.role === 'student') {
+        navigate('/student');
+      } else if (profile.role === 'teacher') {
+        navigate('/teacher');
+      }
+    }
+  }, [user, profile, navigate]);
 
   const texts = {
     en: {
@@ -63,10 +76,27 @@ const Index = () => {
           <div className="text-2xl font-bold bg-gradient-hero bg-clip-text text-transparent">
             {t.title}
           </div>
-          <LanguageToggle 
-            currentLanguage={language} 
-            onLanguageChange={setLanguage} 
-          />
+          <div className="flex items-center gap-4">
+            {user && (
+              <>
+                <span className="text-muted-foreground text-sm">
+                  Welcome, {profile?.display_name}
+                </span>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={signOut}
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Sign Out
+                </Button>
+              </>
+            )}
+            <LanguageToggle 
+              currentLanguage={language} 
+              onLanguageChange={setLanguage} 
+            />
+          </div>
         </div>
       </header>
 
@@ -116,22 +146,57 @@ const Index = () => {
         </div>
 
         <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          <RoleCard
-            title={t.studentRole}
-            description={t.studentDesc}
-            icon={<GraduationCap className="h-8 w-8 text-primary" />}
-            gradient="bg-gradient-quest"
-            onClick={() => handleRoleSelect('student')}
-          />
-          
-          <RoleCard
-            title={t.teacherRole}
-            description={t.teacherDesc}
-            icon={<Users className="h-8 w-8 text-secondary" />}
-            gradient="bg-gradient-achievement"
-            onClick={() => handleRoleSelect('teacher')}
-          />
+          {user ? (
+            // If logged in, show direct dashboard buttons
+            <>
+              <RoleCard
+                title={t.studentRole}
+                description={t.studentDesc}
+                icon={<GraduationCap className="h-8 w-8 text-primary" />}
+                gradient="bg-gradient-quest"
+                onClick={() => navigate('/student')}
+              />
+              
+              <RoleCard
+                title={t.teacherRole}
+                description={t.teacherDesc}
+                icon={<Users className="h-8 w-8 text-secondary" />}
+                gradient="bg-gradient-achievement"
+                onClick={() => navigate('/teacher')}
+              />
+            </>
+          ) : (
+            // If not logged in, show auth options  
+            <>
+              <RoleCard
+                title={t.studentRole}
+                description={t.studentDesc}
+                icon={<GraduationCap className="h-8 w-8 text-primary" />}
+                gradient="bg-gradient-quest"
+                onClick={() => navigate('/auth')}
+              />
+              
+              <RoleCard
+                title={t.teacherRole}
+                description={t.teacherDesc}
+                icon={<Users className="h-8 w-8 text-secondary" />}
+                gradient="bg-gradient-achievement"
+                onClick={() => navigate('/auth')}
+              />
+            </>
+          )}
         </div>
+        
+        {!user && (
+          <div className="text-center pt-8">
+            <p className="text-muted-foreground mb-4">
+              New to SafaQuest? Get started today!
+            </p>
+            <Button variant="outline" size="lg" onClick={() => navigate('/auth')}>
+              Create Account
+            </Button>
+          </div>
+        )}
       </section>
 
       {/* Features Preview */}

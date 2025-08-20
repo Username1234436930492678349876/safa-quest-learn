@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { LanguageToggle } from '@/components/ui/language-toggle';
 import { QuestCard } from '@/components/ui/quest-card';
 import { XPBadge } from '@/components/ui/xp-badge';
@@ -8,62 +9,73 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { BookOpen, Users, Trophy, Target, Zap } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
+import { useStudentData } from '@/hooks/useStudentData';
+import { toast } from '@/hooks/use-toast';
 import aiMentorOwl from '@/assets/ai-mentor-owl.jpg';
 
-interface Quest {
-  id: string;
-  title: string;
-  subject: string;
-  duration: string;
-  difficulty: 'easy' | 'medium' | 'hard';
-  xpReward: number;
-  completed?: boolean;
-  locked?: boolean;
-  progress?: number;
-}
-
-const mockQuests: Quest[] = [
-  {
-    id: '1',
-    title: 'Algebra Fundamentals',
-    subject: 'Mathematics',
-    duration: '15 min',
-    difficulty: 'easy',
-    xpReward: 50,
-    progress: 75
-  },
-  {
-    id: '2', 
-    title: 'Poetry Analysis',
-    subject: 'Arabic Literature',
-    duration: '20 min',
-    difficulty: 'medium',
-    xpReward: 75,
-    locked: false
-  },
-  {
-    id: '3',
-    title: 'Chemical Reactions',
-    subject: 'Science',
-    duration: '25 min',
-    difficulty: 'hard',
-    xpReward: 100,
-    locked: true
-  }
-];
 
 const StudentDashboard = () => {
   const [language, setLanguage] = useState<'en' | 'ar'>('en');
-  const [selectedQuest, setSelectedQuest] = useState<Quest | null>(null);
+  const { user, profile, studentData, loading: authLoading } = useAuth();
+  const { quests, questAttempts, loading: questsLoading, startQuest, getQuestAttempt, isQuestLocked } = useStudentData();
+  const navigate = useNavigate();
 
-  const studentData = {
-    name: 'Ahmed',
-    level: 12,
-    totalXP: 2450,
-    streakDays: 7,
-    guildName: 'Knowledge Seekers',
-    guildRank: 3,
-    weeklyProgress: 65
+  // Redirect to auth if not logged in
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate('/auth');
+    }
+  }, [user, authLoading, navigate]);
+
+  // Set language from profile
+  useEffect(() => {
+    if (profile?.language_pref) {
+      setLanguage(profile.language_pref);
+    }
+  }, [profile]);
+
+  if (authLoading || questsLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+          <p className="mt-4 text-muted-foreground">Loading your adventure...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user || !profile || !studentData) {
+    return null;
+  }
+
+  const handleStartQuest = async (questId: string) => {
+    const existingAttempt = getQuestAttempt(questId);
+    
+    if (existingAttempt) {
+      // Quest already started, handle accordingly
+      toast({
+        title: "Quest In Progress",
+        description: "You've already started this quest!",
+      });
+      return;
+    }
+
+    const result = await startQuest(questId);
+    
+    if (result.error) {
+      toast({
+        title: "Error",
+        description: "Failed to start quest. Please try again.",
+        variant: "destructive"
+      });
+    } else {
+      toast({
+        title: "Quest Started!",
+        description: "Your adventure begins now. Good luck!",
+      });
+    }
   };
 
   const texts = {
@@ -103,7 +115,7 @@ const StudentDashboard = () => {
           </div>
           
           <div className="flex items-center gap-4">
-            <XPBadge xp={studentData.totalXP} level={studentData.level} />
+            <XPBadge xp={studentData.total_xp} level={studentData.level} />
             <LanguageToggle 
               currentLanguage={language} 
               onLanguageChange={setLanguage} 
@@ -115,24 +127,24 @@ const StudentDashboard = () => {
       <main className="container mx-auto px-4 py-8 space-y-8">
         {/* Welcome Section */}
         <section className="text-center space-y-4">
-          <h2 className="text-3xl font-bold">
-            {t.welcome}, {studentData.name}! 🎯
+            <h2 className="text-3xl font-bold">
+            {t.welcome}, {profile.display_name}! 🎯
           </h2>
           
           <div className="flex flex-wrap items-center justify-center gap-6">
             <Badge variant="secondary" className="px-4 py-2 text-base">
               <Zap className="h-4 w-4 mr-2" />
-              {studentData.streakDays} {t.streakDays}
+              {studentData.streak_days} {t.streakDays}
             </Badge>
             
             <Badge variant="outline" className="px-4 py-2 text-base">
               <Users className="h-4 w-4 mr-2" />
-              {studentData.guildName}
+              {studentData.guilds?.name || 'No Guild'}
             </Badge>
             
             <Badge variant="outline" className="px-4 py-2 text-base">
               <Trophy className="h-4 w-4 mr-2" />
-              {t.guildRank} #{studentData.guildRank}
+              {t.guildRank} #{studentData.guilds?.rank_in_class || 'N/A'}
             </Badge>
           </div>
         </section>
@@ -147,10 +159,10 @@ const StudentDashboard = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="flex justify-center">
-              <ProgressRing progress={studentData.weeklyProgress} size={100}>
+              <ProgressRing progress={studentData.weekly_progress} size={100}>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-primary">
-                    {studentData.weeklyProgress}%
+                    {studentData.weekly_progress}%
                   </div>
                   <div className="text-xs text-muted-foreground">Complete</div>
                 </div>
@@ -167,10 +179,10 @@ const StudentDashboard = () => {
             </CardHeader>
             <CardContent className="text-center space-y-3">
               <div className="text-2xl font-bold text-secondary">
-                {studentData.guildName}
+                {studentData.guilds?.name || 'No Guild'}
               </div>
               <div className="text-sm text-muted-foreground">
-                Rank #{studentData.guildRank} in class
+                {studentData.guilds?.rank_in_class ? `Rank #${studentData.guilds.rank_in_class} in class` : 'Join a guild to compete!'}
               </div>
               <Button variant="outline" size="sm">
                 View Guild
@@ -205,13 +217,25 @@ const StudentDashboard = () => {
           </h3>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {mockQuests.map((quest) => (
-              <QuestCard
-                key={quest.id}
-                {...quest}
-                onClick={() => setSelectedQuest(quest)}
-              />
-            ))}
+            {quests.map((quest, index) => {
+              const attempt = getQuestAttempt(quest.id);
+              const locked = isQuestLocked(index);
+              
+              return (
+                <QuestCard
+                  key={quest.id}
+                  title={quest.title}
+                  subject={quest.subject}
+                  duration={quest.duration}
+                  difficulty={quest.difficulty as 'easy' | 'medium' | 'hard'}
+                  xpReward={quest.xp_reward}
+                  completed={attempt?.completed || false}
+                  locked={locked}
+                  progress={attempt?.progress || 0}
+                  onClick={() => locked ? null : handleStartQuest(quest.id)}
+                />
+              );
+            })}
           </div>
         </section>
       </main>
