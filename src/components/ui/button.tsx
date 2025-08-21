@@ -18,7 +18,7 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-sm",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        quest: "bg-gradient-quest text-white border-0 hover:opacity-90 shadow-quest",
+        quest: "bg-gradient-quest text-white border-0 hover:opacity-90 shadow-quest animate-smooth",
         achievement: "bg-gradient-achievement text-secondary-foreground border-0 hover:opacity-90 shadow-achievement",
         hero: "bg-gradient-hero text-white border-0 hover:opacity-90 shadow-quest hover:scale-105 transform",
       },

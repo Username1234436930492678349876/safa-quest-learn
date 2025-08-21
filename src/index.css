@@ -8,54 +8,54 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Core Knowledge Theme */
-    --background: 248 250 252; /* slate-50 */
-    --foreground: 226 32% 22%; /* deep slate */
+    /* Dark Blue and White Theme */
+    --background: 215 27% 97%; /* almost white */
+    --foreground: 215 28% 17%; /* dark blue */
 
-    --card: 255 255 255; /* pure white */
-    --card-foreground: 226 32% 22%;
+    --card: 0 0% 100%; /* pure white */
+    --card-foreground: 215 28% 17%;
 
-    --popover: 255 255 255;
-    --popover-foreground: 226 32% 22%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 28% 17%;
 
-    /* Knowledge Blue Primary */
-    --primary: 227 92% 55%; /* vibrant blue */
-    --primary-foreground: 255 255 255;
-    --primary-dark: 227 92% 25%; /* deeper blue */
+    /* Primary - Deep Blue */
+    --primary: 215 84% 35%; /* deep blue */
+    --primary-foreground: 215 20% 98%;
+    --primary-glow: 215 100% 50%; /* bright blue */
 
-    /* Achievement Gold */
-    --secondary: 45 93% 47%; /* golden amber */
-    --secondary-foreground: 255 255 255;
+    /* Secondary - Light Blue */
+    --secondary: 214 32% 91%; /* light blue */
+    --secondary-foreground: 215 25% 27%;
 
     /* Success & Progress */
-    --success: 158 64% 52%; /* emerald green */
-    --success-foreground: 255 255 255;
+    --success: 142 76% 36%; /* emerald green */
+    --success-foreground: 355 100% 97%;
 
-    --muted: 248 250 252;
-    --muted-foreground: 100 16% 46%;
+    --muted: 215 16% 94%;
+    --muted-foreground: 215 13% 45%;
 
-    --accent: 262 84% 58%; /* quest purple */
-    --accent-foreground: 255 255 255;
+    --accent: 214 32% 91%; /* light blue accent */
+    --accent-foreground: 215 25% 27%;
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 255 255 255;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 226 25% 88%;
-    --input: 226 25% 88%;
-    --ring: 227 92% 55%;
+    --border: 215 17% 89%;
+    --input: 215 17% 89%;
+    --ring: 215 84% 35%;
 
     --radius: 0.75rem;
 
-    /* Quest Gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(227 92% 55%), hsl(262 84% 58%));
-    --gradient-quest: linear-gradient(120deg, hsl(227 92% 55%), hsl(158 64% 52%));
-    --gradient-achievement: linear-gradient(135deg, hsl(45 93% 47%), hsl(38 92% 50%));
-    --gradient-progress: linear-gradient(90deg, hsl(158 64% 52%), hsl(142 76% 36%));
+    /* Dark Blue Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(215 84% 35%), hsl(215 100% 50%));
+    --gradient-quest: linear-gradient(120deg, hsl(215 84% 35%), hsl(215 100% 50%));
+    --gradient-achievement: linear-gradient(135deg, hsl(142 76% 36%), hsl(215 100% 50%));
+    --gradient-progress: linear-gradient(90deg, hsl(215 84% 35%), hsl(215 100% 50%));
     
     /* Shadows & Effects */
-    --shadow-quest: 0 10px 30px -10px hsl(227 92% 55% / 0.3);
-    --shadow-achievement: 0 8px 25px -8px hsl(45 93% 47% / 0.4);
-    --shadow-card: 0 4px 15px -4px hsl(226 32% 22% / 0.1);
+    --shadow-quest: 0 10px 30px -10px hsl(215 84% 35% / 0.3);
+    --shadow-achievement: 0 8px 25px -8px hsl(142 76% 36% / 0.4);
+    --shadow-card: 0 4px 15px -4px hsl(215 28% 17% / 0.1);
     
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -73,47 +73,47 @@ All colors MUST be HSL.
   }
 
   .dark {
-    /* Dark Quest Theme */
-    --background: 226 32% 8%; /* dark slate */
-    --foreground: 248 250 252;
+    /* Dark Blue Theme */
+    --background: 215 28% 17%; /* dark blue */
+    --foreground: 215 20% 98%; /* almost white */
 
-    --card: 226 32% 12%;
-    --card-foreground: 248 250 252;
+    --card: 215 30% 20%; /* dark blue card */
+    --card-foreground: 215 20% 98%;
 
-    --popover: 226 32% 12%;
-    --popover-foreground: 248 250 252;
+    --popover: 215 30% 20%;
+    --popover-foreground: 215 20% 98%;
 
-    --primary: 227 92% 65%; /* brighter blue for dark */
-    --primary-foreground: 226 32% 8%;
-    --primary-dark: 227 92% 35%;
+    --primary: 215 100% 60%; /* bright blue */
+    --primary-foreground: 215 28% 17%;
+    --primary-glow: 215 100% 70%;
 
-    --secondary: 45 93% 55%; /* brighter gold */
-    --secondary-foreground: 226 32% 8%;
+    --secondary: 215 30% 25%; /* dark blue secondary */
+    --secondary-foreground: 215 20% 85%;
 
-    --success: 158 64% 60%;
-    --success-foreground: 226 32% 8%;
+    --success: 142 76% 36%;
+    --success-foreground: 355 100% 97%;
 
-    --muted: 226 32% 15%;
-    --muted-foreground: 226 15% 65%;
+    --muted: 215 30% 25%;
+    --muted-foreground: 215 15% 65%;
 
-    --accent: 262 84% 70%;
-    --accent-foreground: 226 32% 8%;
+    --accent: 215 30% 25%;
+    --accent-foreground: 215 20% 85%;
 
-    --destructive: 0 84% 70%;
-    --destructive-foreground: 226 32% 8%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 226 25% 20%;
-    --input: 226 25% 20%;
-    --ring: 227 92% 65%;
+    --border: 215 30% 25%;
+    --input: 215 30% 25%;
+    --ring: 215 100% 60%;
 
-    /* Dark Gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(227 92% 35%), hsl(262 84% 45%));
-    --gradient-quest: linear-gradient(120deg, hsl(227 92% 45%), hsl(158 64% 45%));
-    --gradient-achievement: linear-gradient(135deg, hsl(45 93% 55%), hsl(38 92% 60%));
+    /* Dark Blue Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(215 100% 60%), hsl(215 100% 70%));
+    --gradient-quest: linear-gradient(120deg, hsl(215 100% 60%), hsl(215 100% 70%));
+    --gradient-achievement: linear-gradient(135deg, hsl(142 76% 36%), hsl(215 100% 70%));
     
     /* Dark Shadows */
-    --shadow-quest: 0 10px 30px -10px hsl(227 92% 25% / 0.5);
-    --shadow-achievement: 0 8px 25px -8px hsl(45 93% 35% / 0.4);
+    --shadow-quest: 0 10px 30px -10px hsl(215 100% 60% / 0.4);
+    --shadow-achievement: 0 8px 25px -8px hsl(142 76% 36% / 0.4);
     --shadow-card: 0 4px 15px -4px hsl(0 0% 0% / 0.3);
 
     /* Dark Sidebar */

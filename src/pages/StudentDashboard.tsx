@@ -54,11 +54,8 @@ const StudentDashboard = () => {
     const existingAttempt = getQuestAttempt(questId);
     
     if (existingAttempt) {
-      // Quest already started, handle accordingly
-      toast({
-        title: "Quest In Progress",
-        description: "You've already started this quest!",
-      });
+      // Quest already started, navigate to quest page
+      navigate(`/quest/${questId}`);
       return;
     }
 
@@ -75,6 +72,7 @@ const StudentDashboard = () => {
         title: "Quest Started!",
         description: "Your adventure begins now. Good luck!",
       });
+      navigate(`/quest/${questId}`);
     }
   };
 
@@ -232,7 +230,7 @@ const StudentDashboard = () => {
                   completed={attempt?.completed || false}
                   locked={locked}
                   progress={attempt?.progress || 0}
-                  onClick={() => locked ? null : handleStartQuest(quest.id)}
+                  onClick={() => locked ? null : (attempt ? navigate(`/quest/${quest.id}`) : handleStartQuest(quest.id))}
                 />
               );
             })}
