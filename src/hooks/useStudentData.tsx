@@ -10,6 +10,11 @@ interface Quest {
   difficulty: string;
   xp_reward: number;
   content: any;
+  steps?: any;
+  created_at?: string;
+  updated_at?: string;
+  grade_level?: number;
+  skill_tags?: string[];
 }
 
 interface QuestAttempt {
@@ -18,6 +23,14 @@ interface QuestAttempt {
   progress: number;
   completed: boolean;
   quests: Quest;
+  completed_at?: string;
+  created_at?: string;
+  hint_count?: number;
+  started_at?: string;
+  step_results?: any;
+  time_spent?: number;
+  updated_at?: string;
+  user_id?: string;
 }
 
 export const useStudentData = () => {
@@ -45,7 +58,7 @@ export const useStudentData = () => {
         .order('created_at', { ascending: true });
 
       if (questsData) {
-        setQuests(questsData);
+        setQuests(questsData as Quest[]);
       }
 
       // Fetch user's quest attempts
@@ -58,7 +71,7 @@ export const useStudentData = () => {
         .eq('user_id', user.id);
 
       if (attemptsData) {
-        setQuestAttempts(attemptsData);
+        setQuestAttempts(attemptsData as QuestAttempt[]);
       }
     } catch (error) {
       console.error('Error fetching student data:', error);
@@ -88,7 +101,7 @@ export const useStudentData = () => {
       if (error) throw error;
 
       if (data) {
-        setQuestAttempts(prev => [...prev, data]);
+        setQuestAttempts(prev => [...prev, data as QuestAttempt]);
       }
 
       return { data, error: null };
@@ -123,7 +136,7 @@ export const useStudentData = () => {
       if (data) {
         setQuestAttempts(prev => 
           prev.map(attempt => 
-            attempt.id === attemptId ? data : attempt
+            attempt.id === attemptId ? data as QuestAttempt : attempt
           )
         );
 

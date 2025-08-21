@@ -12,12 +12,12 @@ const Index = () => {
   const { user, profile, signOut } = useAuth();
   const navigate = useNavigate();
 
-  // Redirect logged in users to their dashboard
+  // Redirect authenticated users to appropriate dashboard
   useEffect(() => {
     if (user && profile) {
       if (profile.role === 'student') {
         navigate('/student');
-      } else if (profile.role === 'teacher') {
+      } else if (profile.role === 'teacher' || profile.role === 'admin') {
         navigate('/teacher');
       }
     }
@@ -85,7 +85,10 @@ const Index = () => {
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  onClick={signOut}
+                  onClick={() => {
+                    signOut();
+                    navigate('/');
+                  }}
                 >
                   <LogOut className="h-4 w-4 mr-2" />
                   Sign Out
@@ -129,6 +132,17 @@ const Index = () => {
                   <span className="text-sm font-medium">{feature}</span>
                 </div>
               ))}
+            </div>
+
+            <div className="pt-6">
+              <Button 
+                size="lg" 
+                variant="hero" 
+                className="text-lg px-8 py-4"
+                onClick={() => navigate('/auth')}
+              >
+                {t.getStarted}
+              </Button>
             </div>
           </div>
         </div>

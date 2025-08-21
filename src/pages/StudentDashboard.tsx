@@ -12,12 +12,13 @@ import { BookOpen, Users, Trophy, Target, Zap } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useStudentData } from '@/hooks/useStudentData';
 import { toast } from '@/hooks/use-toast';
+import AIMentor from '@/components/AIMentor';
 import aiMentorOwl from '@/assets/ai-mentor-owl.jpg';
 
 
 const StudentDashboard = () => {
   const [language, setLanguage] = useState<'en' | 'ar'>('en');
-  const { user, profile, studentData, loading: authLoading } = useAuth();
+  const { user, profile, studentData, loading: authLoading, signOut } = useAuth();
   const { quests, questAttempts, loading: questsLoading, startQuest, getQuestAttempt, isQuestLocked } = useStudentData();
   const navigate = useNavigate();
 
@@ -118,6 +119,15 @@ const StudentDashboard = () => {
               currentLanguage={language} 
               onLanguageChange={setLanguage} 
             />
+            <Button 
+              variant="outline" 
+              onClick={() => {
+                signOut();
+                navigate('/');
+              }}
+            >
+              {language === 'en' ? 'Logout' : 'تسجيل خروج'}
+            </Button>
           </div>
         </div>
       </header>
@@ -188,23 +198,7 @@ const StudentDashboard = () => {
             </CardContent>
           </Card>
 
-          <Card className="quest-card">
-            <CardHeader className="text-center">
-              <CardTitle className="flex items-center justify-center gap-2">
-                <BookOpen className="h-5 w-5" />
-                AI Mentor
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="text-center space-y-3">
-              <Avatar className="mx-auto h-16 w-16">
-                <AvatarImage src={aiMentorOwl} alt="AI Mentor" />
-                <AvatarFallback>🦉</AvatarFallback>
-              </Avatar>
-              <Button variant="quest" size="sm" className="w-full">
-                {t.askMentor}
-              </Button>
-            </CardContent>
-          </Card>
+          <AIMentor language={language} />
         </section>
 
         {/* Today's Quests */}

@@ -31,29 +31,31 @@ const QuestPage = () => {
     return null;
   }
 
-  // Mock quest steps for demonstration
-  const steps = [
+  // Get the actual quest steps from quest.content or use mock data
+  const steps = quest.content?.steps && quest.content.steps.length > 0 ? quest.content.steps : [
     {
       id: 1,
       type: 'multiple_choice',
-      question: 'What is the capital of France?',
-      options: ['London', 'Berlin', 'Paris', 'Madrid'],
-      correct: 2,
-      hint: 'Think about the city known for the Eiffel Tower!'
+      question: `What is the main topic of "${quest.title}"?`,
+      options: ['Mathematics', 'Science', 'Language', 'History'],
+      correct: quest.subject.toLowerCase().includes('math') ? 0 : 
+               quest.subject.toLowerCase().includes('science') ? 1 :
+               quest.subject.toLowerCase().includes('language') ? 2 : 3,
+      hint: `This quest is about ${quest.subject}. Think about what category that falls under.`
     },
     {
       id: 2,
       type: 'multiple_choice',
-      question: 'Which planet is known as the Red Planet?',
-      options: ['Venus', 'Mars', 'Jupiter', 'Saturn'],
-      correct: 1,
-      hint: 'This planet is named after the Roman god of war.'
+      question: `This quest has a ${quest.difficulty} difficulty level. What does this mean?`,
+      options: ['Very challenging', 'Moderate challenge', 'Easy to complete', 'Depends on the person'],
+      correct: quest.difficulty === 'hard' ? 0 : quest.difficulty === 'medium' ? 1 : 2,
+      hint: `${quest.difficulty.charAt(0).toUpperCase() + quest.difficulty.slice(1)} difficulty means it should be ${quest.difficulty === 'easy' ? 'accessible to most learners' : quest.difficulty === 'medium' ? 'moderately challenging' : 'quite challenging'}.`
     },
     {
       id: 3,
       type: 'text',
-      question: 'Name one renewable energy source.',
-      hint: 'Think about energy from the sun, wind, or water.'
+      question: `What do you hope to learn from completing "${quest.title}"? Write at least one sentence.`,
+      hint: `Think about the skills or knowledge you might gain from a ${quest.subject} quest.`
     }
   ];
 
